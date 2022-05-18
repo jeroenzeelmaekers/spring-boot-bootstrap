@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  spring:
+    container_name: spring
+    build:
+      dockerfile: ./src/main/resources/Dockerfile
+      context: ./
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/spring-boot-bootstrap-db
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    volumes:
+      - spring:/home/user/api
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spring-boot-bootstrap-db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  spring:

@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-boot-boostrap
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring-boot-bootstrap-db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+        dialect: org.hibernate.dialect.PostgresSQLDialect
