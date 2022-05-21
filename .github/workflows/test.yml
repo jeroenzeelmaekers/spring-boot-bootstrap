@@ -21,11 +21,9 @@ jobs:
         cache: maven
         
     - name: Build
-      working-directory: ./
       run: mvn --batch-mode -DskipTests package
     
     - name: Test
-      working-directory: ./
       run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
       
     - name: Report
@@ -33,6 +31,6 @@ jobs:
       if: always()
       with:
         name: Maven Tests
-        path: ./target/sunfire-reports/*.xml
+        path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
