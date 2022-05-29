@@ -3,5 +3,5 @@ package bootstrap.dtos.note;
 import lombok.Builder;
 
 @Builder
-public record CreateNoteDto( String content ) {
+public record CreateNoteDto(String content) {
 }

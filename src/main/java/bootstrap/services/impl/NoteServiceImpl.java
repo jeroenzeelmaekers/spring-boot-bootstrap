@@ -8,22 +8,22 @@ import bootstrap.services.NoteService;
 import org.springframework.stereotype.Service;
 
 @Service
-public record NoteServiceImpl( NoteRepository noteRepository ) implements NoteService {
+public record NoteServiceImpl(NoteRepository noteRepository) implements NoteService {
 
     @Override
-    public Note getNoteById( Long id ) throws NoNoteFoundException {
-        return noteRepository.findById( id ).orElseThrow( () ->
-                new NoNoteFoundException( "There is no note with id:" + id ) );
+    public Note getNoteById(Long id) throws NoNoteFoundException {
+        return noteRepository.findById(id).orElseThrow(() ->
+                new NoNoteFoundException("There is no note with id:" + id));
     }
 
     @Override
-    public Note create( CreateNoteDto createNoteDto ) {
+    public Note create(CreateNoteDto createNoteDto) {
         Note note = Note
                 .builder()
-                .content( createNoteDto.content() )
+                .content(createNoteDto.content())
                 .build();
 
-        return noteRepository.save( note );
+        return noteRepository.save(note);
     }
 
 }

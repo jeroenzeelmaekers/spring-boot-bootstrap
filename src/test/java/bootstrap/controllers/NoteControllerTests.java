@@ -7,7 +7,6 @@ import bootstrap.exception.NoNoteFoundException;
 import bootstrap.services.NoteService;
 import bootstrap.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jdk.jfr.ContentType;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-@ActiveProfiles( value = "test" )
-@WebMvcTest( NoteController.class )
+@ActiveProfiles(value = "test")
+@WebMvcTest(NoteController.class)
 public class NoteControllerTests {
 
     @MockBean
@@ -36,8 +35,8 @@ public class NoteControllerTests {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void init( WebApplicationContext context ) {
-        mockMvc = MockMvcBuilders.webAppContextSetup( context ).build();
+    public void init(WebApplicationContext context) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
     @Test
@@ -45,27 +44,27 @@ public class NoteControllerTests {
     public void getById_ShouldReturnAnExistingNote_WhenAValidIdIsGiven() {
 
         Note note = Note.builder()
-                .id( 1L )
-                .content( "Test Note" )
+                .id(1L)
+                .content("Test Note")
                 .build();
 
-        when( noteService.getNoteById( 1L ) ).thenReturn( note );
+        when(noteService.getNoteById(1L)).thenReturn(note);
 
         try {
-            mockMvc.perform( MockMvcRequestBuilders
-                            .get( "/api/v1/note/1" ) )
-                    .andExpect( MockMvcResultMatchers.status()
-                            .isOk() )
-                    .andExpect( MockMvcResultMatchers
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/v1/note/1"))
+                    .andExpect(MockMvcResultMatchers.status()
+                            .isOk())
+                    .andExpect(MockMvcResultMatchers
                             .content()
-                            .json( JsonUtil.toJson( note ) ) );
-        } catch ( JsonProcessingException e ) {
-            fail( "Failed to convert to json" );
-        } catch ( Exception e ) {
+                            .json(JsonUtil.toJson(note)));
+        } catch (JsonProcessingException e) {
+            fail("Failed to convert to json");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        verify( noteService, times( 1 ) ).getNoteById( 1L );
+        verify(noteService, times(1)).getNoteById(1L);
 
     }
 
@@ -75,23 +74,23 @@ public class NoteControllerTests {
 
         long id = 1L;
 
-        when( noteService.getNoteById( 1L ) ).thenThrow( new NoNoteFoundException( "There is no note with id " + id ) );
+        when(noteService.getNoteById(1L)).thenThrow(new NoNoteFoundException("There is no note with id " + id));
 
         try {
-            mockMvc.perform( MockMvcRequestBuilders
-                            .get( "/api/v1/note/1" ) )
-                    .andExpect( MockMvcResultMatchers.status()
-                            .isOk() )
-                    .andExpect( MockMvcResultMatchers
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/v1/note/1"))
+                    .andExpect(MockMvcResultMatchers.status()
+                            .isOk())
+                    .andExpect(MockMvcResultMatchers
                             .content()
-                            .string( "There is no note with id " + id ) );
-        } catch ( JsonProcessingException e ) {
-            fail( "Failed to convert to json" );
-        } catch ( Exception e ) {
+                            .string("There is no note with id " + id));
+        } catch (JsonProcessingException e) {
+            fail("Failed to convert to json");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        verify( noteService, times( 1 ) ).getNoteById( 1L );
+        verify(noteService, times(1)).getNoteById(1L);
 
     }
 
@@ -100,33 +99,33 @@ public class NoteControllerTests {
     public void create_ShouldSuccessfullyCreateANNewNote() {
 
         CreateNoteDto createNoteDto = CreateNoteDto.builder()
-                .content( "Test note" )
+                .content("Test note")
                 .build();
 
         Note note = Note.builder()
-                .id( 1L )
-                .content( "Test note" )
+                .id(1L)
+                .content("Test note")
                 .build();
 
-        when( noteService.create( createNoteDto ) ).thenReturn( note );
+        when(noteService.create(createNoteDto)).thenReturn(note);
 
         try {
-            mockMvc.perform( MockMvcRequestBuilders
-                            .post( "/api/v1/note" )
-                            .contentType( MediaType.APPLICATION_JSON )
-                            .content( JsonUtil.toJson( createNoteDto ) ) )
-                    .andExpect( MockMvcResultMatchers.status()
-                            .isOk() )
-                    .andExpect( MockMvcResultMatchers
+            mockMvc.perform(MockMvcRequestBuilders
+                            .post("/api/v1/note")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(JsonUtil.toJson(createNoteDto)))
+                    .andExpect(MockMvcResultMatchers.status()
+                            .isOk())
+                    .andExpect(MockMvcResultMatchers
                             .content()
-                            .json( JsonUtil.toJson( note ) ) );
-        } catch ( JsonProcessingException e ) {
-            fail( "Failed to convert to json" );
-        } catch ( Exception e ) {
+                            .json(JsonUtil.toJson(note)));
+        } catch (JsonProcessingException e) {
+            fail("Failed to convert to json");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        verify( noteService, times( 1 ) ).create( createNoteDto );
+        verify(noteService, times(1)).create(createNoteDto);
 
     }
 

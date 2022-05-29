@@ -6,7 +6,7 @@ import bootstrap.exception.NoNoteFoundException;
 
 public interface NoteService {
 
-    Note getNoteById( Long id ) throws NoNoteFoundException;
+    Note getNoteById(Long id) throws NoNoteFoundException;
 
-    Note create( CreateNoteDto createNoteDto );
+    Note create(CreateNoteDto createNoteDto);
 }
