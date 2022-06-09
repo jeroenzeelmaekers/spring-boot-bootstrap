@@ -5,15 +5,24 @@ import bootstrap.entities.Note;
 import bootstrap.exception.NoNoteFoundException;
 import bootstrap.repositories.NoteRepository;
 import bootstrap.services.NoteService;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public record NoteServiceImpl(NoteRepository noteRepository) implements NoteService {
 
     @Override
+    public List<Note> getAll() {
+        return noteRepository.findAll();
+    }
+
+    @Override
     public Note getNoteById(Long id) throws NoNoteFoundException {
-        return noteRepository.findById(id).orElseThrow(() ->
-                new NoNoteFoundException("There is no note with id:" + id));
+        return noteRepository
+                .findById(id)
+                .orElseThrow(() -> new NoNoteFoundException("There is no note with id:" + id));
     }
 
     @Override

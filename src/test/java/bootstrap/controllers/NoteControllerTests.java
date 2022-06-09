@@ -1,11 +1,14 @@
 package bootstrap.controllers;
 
+import com.thedeanda.lorem.LoremIpsum;
+
 import bootstrap.controllers.v1.NoteController;
 import bootstrap.dtos.note.CreateNoteDto;
 import bootstrap.entities.Note;
 import bootstrap.exception.NoNoteFoundException;
 import bootstrap.services.NoteService;
 import bootstrap.utils.JsonUtil;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +26,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @ActiveProfiles(value = "test")
 @WebMvcTest(NoteController.class)
@@ -52,7 +59,7 @@ public class NoteControllerTests {
 
         try {
             mockMvc.perform(MockMvcRequestBuilders
-                            .get("/api/v1/note/1"))
+                    .get("/api/v1/note/1"))
                     .andExpect(MockMvcResultMatchers.status()
                             .isOk())
                     .andExpect(MockMvcResultMatchers
@@ -78,7 +85,7 @@ public class NoteControllerTests {
 
         try {
             mockMvc.perform(MockMvcRequestBuilders
-                            .get("/api/v1/note/1"))
+                    .get("/api/v1/note/1"))
                     .andExpect(MockMvcResultMatchers.status()
                             .isOk())
                     .andExpect(MockMvcResultMatchers
@@ -111,9 +118,9 @@ public class NoteControllerTests {
 
         try {
             mockMvc.perform(MockMvcRequestBuilders
-                            .post("/api/v1/note")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(JsonUtil.toJson(createNoteDto)))
+                    .post("/api/v1/note")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonUtil.toJson(createNoteDto)))
                     .andExpect(MockMvcResultMatchers.status()
                             .isOk())
                     .andExpect(MockMvcResultMatchers
@@ -127,6 +134,37 @@ public class NoteControllerTests {
 
         verify(noteService, times(1)).create(createNoteDto);
 
+    }
+
+    @Test
+    public void getAll_ShouldReturnAllNotesInTheDb() {
+        List<Note> notes = new ArrayList<>();
+
+        LoremIpsum lorum = LoremIpsum.getInstance();
+        Random random = new Random();
+
+        for (int i = 0; i < 5; i++) {
+            notes.add(Note.builder()
+                    .content(lorum.getWords(random.nextInt(5, 20)))
+                    .build());
+        }
+
+        when(noteService.getAll()).thenReturn(notes);
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders
+                    .get("/api/v1/note"))
+                    .andExpect(MockMvcResultMatchers.status()
+                            .isOk())
+                    .andExpect(MockMvcResultMatchers.content()
+                            .json(JsonUtil.toJson(notes)));
+        } catch (JsonProcessingException e) {
+            fail("Failed to convert to json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        verify(noteService, times(1)).getAll();
     }
 
 }

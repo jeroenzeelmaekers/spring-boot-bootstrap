@@ -5,6 +5,9 @@ import bootstrap.entities.Note;
 import bootstrap.exception.NoNoteFoundException;
 import bootstrap.services.NoteService;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/note")
 public record NoteController(NoteService noteService) {
+
+    @GetMapping(value = "")
+    ResponseEntity<?> getAll() {
+
+        List<Note> notes;
+
+        notes = noteService.getAll();
+
+        return ResponseEntity.ok(notes);
+
+    }
 
     @GetMapping(value = "/{noteId}")
     ResponseEntity<?> getById(@PathVariable(value = "noteId") Long id) {
@@ -21,7 +35,7 @@ public record NoteController(NoteService noteService) {
         try {
             note = noteService.getNoteById(id);
         } catch (NoNoteFoundException e) {
-            log.error(e.getMessage());
+            log.info(e.getMessage());
             return ResponseEntity.ok(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
