@@ -81,7 +81,8 @@ public class NoteControllerTests {
 
         long id = 1L;
 
-        when(noteService.getNoteById(1L)).thenThrow(new NoNoteFoundException("There is no note with id " + id));
+        when(noteService.getNoteById(1L))
+                .thenThrow(new NoNoteFoundException("There is no note with id " + id));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders
@@ -97,7 +98,8 @@ public class NoteControllerTests {
             e.printStackTrace();
         }
 
-        verify(noteService, times(1)).getNoteById(1L);
+        verify(noteService, times(1))
+                .getNoteById(1L);
 
     }
 
@@ -132,7 +134,8 @@ public class NoteControllerTests {
             e.printStackTrace();
         }
 
-        verify(noteService, times(1)).create(createNoteDto);
+        verify(noteService, times(1))
+                .create(createNoteDto);
 
     }
 
@@ -145,7 +148,9 @@ public class NoteControllerTests {
 
         for (int i = 0; i < 5; i++) {
             notes.add(Note.builder()
-                    .content(lorum.getWords(random.nextInt(5, 20)))
+                    .content(lorum.getWords(
+                            random.nextInt(5, 20)
+                    ))
                     .build());
         }
 
@@ -164,7 +169,8 @@ public class NoteControllerTests {
             e.printStackTrace();
         }
 
-        verify(noteService, times(1)).getAll();
+        verify(noteService, times(1))
+                .getAll();
     }
 
 }
