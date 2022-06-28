@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/note")
 public record NoteController(NoteService noteService) {
 
-    @GetMapping(value = "")
+    @GetMapping
     ResponseEntity<?> getAll() {
 
         List<Note> notes;
